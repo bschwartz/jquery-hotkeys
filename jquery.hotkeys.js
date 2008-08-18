@@ -10,7 +10,19 @@
 //     'b': function() { alert('something else') }
 //   })
 //
+// also privode the Javascript key code.
+//
+//   $.hotkeys({
+//     37: function() { alert('left arrow button')},
+//     39: function() { alert('right arrow button')}
+//   })
+//
 (function($) {
+  
+  var isInteger = function(s) {
+    return !isNaN(parseInt(s));
+  }
+  
   $.hotkeys = function(options) {
     for(key in options) $.hotkey(key, options[key])
     return this
@@ -18,7 +30,12 @@
 
   // accepts a function or url
   $.hotkey = function(key, value) {
-    $.hotkeys.cache[key.charCodeAt(0) - 32] = value
+    if (isInteger(key)) {
+      $.hotkeys.cache[parseInt(key)] = value;
+    }
+    else {
+      $.hotkeys.cache[key.charCodeAt(0) - 32] = value
+    }
     return this
   }
   
