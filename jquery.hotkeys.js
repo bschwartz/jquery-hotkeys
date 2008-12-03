@@ -5,22 +5,17 @@
 //
 //   $.hotkey('a', function() { window.location = 'somewhere' })
 //
+//   Provide key using the character or actual keycode
+//   
 //   $.hotkeys({
-//     'a': function() { window.location = 'somewhere' },
-//     'b': function() { alert('something else') }
-//   })
-//
-// also privode the Javascript key code.
-//
-//   $.hotkeys({
-//     37: function() { alert('left arrow button')},
-//     39: function() { alert('right arrow button')}
+//     'a': function() { alert('a is for appletini' },
+//     37: function(e) { alert('left arrow button, a.k.a. keycode ' + e.keyCode) }
 //   })
 //
 (function($) {
   
   var isInteger = function(s) {
-    return !isNaN(parseInt(s));
+    return !isNaN(parseInt(s))
   }
   
   $.hotkeys = function(options) {
@@ -30,12 +25,8 @@
 
   // accepts a function or url
   $.hotkey = function(key, value) {
-    if (isInteger(key)) {
-      $.hotkeys.cache[parseInt(key)] = value;
-    }
-    else {
-      $.hotkeys.cache[key.charCodeAt(0) - 32] = value
-    }
+    if (isInteger(key)) $.hotkeys.cache[parseInt(key)] = value
+    else                $.hotkeys.cache[key.charCodeAt(0) - 32] = value
     return this
   }
   
@@ -53,6 +44,6 @@ jQuery(document).ready(function($) {
     // no modifiers supported 
     if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return true
     var el = $.hotkeys.cache[e.keyCode]
-    if (el) $.isFunction(el) ? el.call(this) : window.location = el
+    if (el) $.isFunction(el) ? el.call(this, e) : window.location = el
   })
 });
